@@ -765,11 +765,16 @@ int main()
                     ayuda.clear();
                     auxiliar.clear();
                     auxiliar_apoyo.clear();
+                    int encabezado_sig;
 
                     palabra = getc(archivo);
                     auxiliar = binario_8bits(palabra);
-                    cout<<"Encabezado siguiente: "<<bin_dec(auxiliar)<<endl;
-
+                    ayuda_int = bin_dec(auxiliar);
+                    cout<<"Encabezado siguiente: ";
+                    encabezado_sig = bin_dec(auxiliar);
+                    if(encabezado_sig == 58){
+                        cout<< "58. ICMPv6"<<endl;
+                    }
                     // LIMITE DE SALTO
                     ayuda.clear();
                     auxiliar.clear();
@@ -792,6 +797,10 @@ int main()
                         printf("%x:",palabra);
                     }
                     cout<<endl;
+
+                    if(encabezado_sig == 58){
+                        
+                    }
                     break;
                 }
 
