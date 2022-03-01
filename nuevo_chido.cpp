@@ -775,6 +775,22 @@ int main()
                     if(encabezado_sig == 58){
                         cout<< "58. ICMPv6"<<endl;
                     }
+                    if(encabezado_sig== 1){
+                        cout<< "ICMP v4 no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 6){
+                        cout<< "TCP no es posible"<<endl;
+                    }
+                    if(encabezado_sig== 17){
+                        cout<< "UDP no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 118){
+                        cout<< "STP no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 121){
+                        cout<< "SMP no es posible"<<endl;
+                    }
+
                     // LIMITE DE SALTO
                     ayuda.clear();
                     auxiliar.clear();
@@ -797,9 +813,121 @@ int main()
                         printf("%x:",palabra);
                     }
                     cout<<endl;
+                    
+
+                    //ICMPv6
 
                     if(encabezado_sig == 58){
+                        int tipo_icmp = 0;
+                        cout<<endl<< "----------ICMPv6-------"<<endl;
+                        //tipo
+                        palabra = getc(archivo);
+                        ayuda.clear();
+                        auxiliar.clear();
+                        ayuda = binario_8bits(palabra);
+                        tipo_icmp = bin_dec(ayuda);
+                        cout<< "Tipo: " << tipo_icmp <<endl;
+                        ayuda.clear();
                         
+                        //codigo
+                        int codigo_icmp;
+                        palabra = getc(archivo);
+                        ayuda = binario_8bits(palabra);
+                        codigo_icmp = bin_dec(ayuda);
+                        cout<< "El codigo es: "<< codigo_icmp<< endl;
+                        ayuda.clear();
+                        
+                        //ifs anidados para tablas
+                        if(tipo_icmp == 1){
+                            cout<<"Mensaje de destino inalcanzable"<<endl;
+                            if(codigo_icmp==0){
+                                cout<<"No existe ruta de destino"<<endl;
+                            }
+                            if(codigo_icmp==1){
+                                cout<<"Comunicacion con el destino administrativamente prohibida"<<endl;
+                            }
+                            if(codigo_icmp==2){
+                                cout<<"No asignado"<<endl;
+                            }
+                            if(codigo_icmp==3){
+                                cout<<"Direccion inalcanzable"<<endl;
+                            }
+                        }
+                        if(tipo_icmp == 2){
+                            cout<<"Mensaje de paquetes demasiado grande"<<endl;
+                            
+                        }
+                        if(tipo_icmp == 3){
+                            cout<< "time exeded Message"<<endl;
+                            if(codigo_icmp==0){
+                                cout<<"El limite del salto excedido"<<endl;
+                            }
+                            if(codigo_icmp==1){
+                                cout<<"Tiempo de Reensamble de fragmento excedido"<<endl;
+                            }
+                        }
+                        if(tipo_icmp == 4){
+                            cout<<"Mensaje de problema de parametro"<<endl;
+                            if(codigo_icmp==0){
+                                cout<<"el campo de encabezado erroneo encontro"<<endl;
+                            }
+                            if(codigo_icmp==1){
+                                cout<<"El tipo siguiente desconocido de la encabezado encontro"<<endl;
+                            }
+                            if(codigo_icmp==2){
+                                cout<<"opcion desconocida del IPv6 encontrada"<<endl;
+                            }
+                        }
+                        if(tipo_icmp==128){
+                            cout<<"Mensaje del pedido de eco"<<endl;
+                        }
+                        if(tipo_icmp==129){
+                            cout<< "Mensaje de respuesta de eco"<<endl;
+                        }
+                        if(tipo_icmp==133){
+                            cout<<"Mensaje de solicitud del router"<<endl;
+                        }
+                        if(tipo_icmp==134){
+                            cout<<"Mensaje de anuncio del router"<<endl;
+                        }
+                        if(tipo_icmp==135){
+                            cout<<"Mensaje de solicitud vecino"<<endl;
+                        }
+                        if(tipo_icmp==136){
+                            cout<<"Mensaje de anuncio de vecino"<<endl;
+                        }
+                        if(tipo_icmp==137){
+                            cout<<"Reoriente el mensaje"<<endl;
+                        }
+
+
+
+
+                        //checksum
+                        cout<<endl;
+                        cout<<"--------Checksum--------"<<endl;
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            printf("%x:",palabra);
+                            
+                        }
+                        cout<<endl;
+
+                    }
+                    if(encabezado_sig== 1){
+                        cout<< "ICMP v4 no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 6){
+                        cout<< "TCP no es posible"<<endl;
+                    }
+                    if(encabezado_sig== 17){
+                        cout<< "UDP no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 118){
+                        cout<< "STP no es posible"<<endl;
+                    }
+                    if(encabezado_sig == 121){
+                        cout<< "SMP no es posible"<<endl;
                     }
                     break;
                 }
