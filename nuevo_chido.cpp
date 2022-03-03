@@ -635,6 +635,7 @@ int main()
                         if(ayuda_int>=0 and ayuda_int<= 1023){
                             cout<<"Puertos bien conocidos"<<endl;
                             //ifssss puertos bien conocidos
+
                         }
                         if(ayuda_int>=1024 and ayuda_int<= 49151){
                             cout<<"Puertos registrados"<<endl;
@@ -643,6 +644,7 @@ int main()
                             cout<<"Puertos dinamicos o privados"<<endl;
                         }
                         //puerto de destino
+                        ayuda.clear();
                         for(i=0;i<=1;i++){
                             palabra = getc(archivo);
                             ayuda += binario_8bits(palabra);
@@ -654,6 +656,9 @@ int main()
                         if(ayuda_double>=0 and ayuda_double<= 1023){
                             cout<<"Puertos bien conocidos"<<endl;
                             //ifssss puertos bien conocidos
+                            if(ayuda_double == 53){
+                                cout<<"Servicio: DNS"<< endl << "Protocolo: TCP/UDP";
+                            }
                         }
                         if(ayuda_double>=1024 and ayuda_double<= 49151){
                             cout<<"Puertos registrados"<<endl;
@@ -669,7 +674,7 @@ int main()
                         auxiliar.clear();
                         for(i=0;i<=1;i++){
                             palabra = getc(archivo);
-                            ayuda += palabra;
+                            ayuda += binario_8bits(palabra);
                         }
                         ayuda_int = bin_dec_double(ayuda);
                         cout<<"Longitud total es:"<< ayuda_int<<endl;
