@@ -19,6 +19,17 @@ int bin_dec(string n){
     }
     return decimal;
 }
+unsigned int bin_dec_double(string n){
+    unsigned int decimal = 0;
+    unsigned int in = 0;
+    for(int i=n.length()-1;i>=0;i--){
+        if(n[i]=='1'){
+            decimal += pow(2, in);
+        }
+        in++;
+    }
+    return decimal;
+}
 
 void binario_ver(char n)
 {
@@ -104,7 +115,7 @@ int main()
 
     FILE *archivo;
 
-    if ((archivo = fopen("ethernet_ipv6_nd.bin","rb+")) == NULL)
+    if ((archivo = fopen("ethernet_ipv4_udp_dns.bin","rb+")) == NULL)
         {
             printf (" Error en la apertura. Es posible que el fichero no exista. \n");
         }
@@ -287,6 +298,8 @@ int main()
                         palabra=fgetc(archivo);
                     }
                     version_r = protocolo(palabra);
+                    version_r = bin_dec(binario_8bits(palabra));
+                    
                     ayuda.clear();
                     auxiliar.clear();
 
@@ -321,6 +334,7 @@ int main()
                     cout<<endl<<endl;
                     auxiliar.clear();
                     ayuda.clear();
+                    //ICMPv4
                     if(version_r==1){
                         int ayuda_2=0;
 
@@ -419,8 +433,259 @@ int main()
                             printf ("%02x:",palabra);
 
                     }
+                    
+                    //tcp
                     cout << endl<<endl;
                     }
+                    //tcp
+
+                    if(version_r==6){
+                        cout<<"TCP"<<endl;
+                        //tcp
+                        ayuda.clear();
+                        auxiliar.clear();
+                        //puerto de origen
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        
+                        ayuda_int= bin_dec(ayuda);
+                        cout<< "Puerto de origen: "<<ayuda_int<<endl;
+                        cout<< "Puerto de origen catalogado: ";
+                        if(ayuda_int>=0 and ayuda_int<= 1023){
+                            cout<<"Puertos bien conocidos"<<endl;
+                            //ifssss puertos bien conocidos
+                        }
+                        if(ayuda_int>=1024 and ayuda_int<= 49151){
+                            cout<<"Puertos registrados"<<endl;
+                        }
+                        if(ayuda_int>=49152 and ayuda_int<=65535){
+                            cout<<"Puertos dinamicos o privados"<<endl;
+                        }
+                        ayuda.clear();
+                        //puerto de destino
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        
+                        ayuda_int= bin_dec(ayuda);
+                        cout<< "Puerto de destino: "<<ayuda_int<<endl;
+                        cout<< "Puerto de destino catalogado: ";
+                        if(ayuda_int>=0 and ayuda_int<= 1023){
+                            cout<<"Puertos bien conocidos"<<endl;
+                            //ifssss puertos bien conocidos
+                        }
+                        if(ayuda_int>=1024 and ayuda_int<= 49151){
+                            cout<<"Puertos registrados"<<endl;
+                        }
+                        if(ayuda_int>=49152 and ayuda_int<=65535){
+                            cout<<"Puertos dinamicos o privados"<<endl;
+                        }
+                        //Numero de secuencias
+                        cout<<"numeros de secuencias"<<endl;
+                        ayuda.clear();
+                        auxiliar.clear();
+                        for(i=0;i<=3;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        cout<< "Numero de secuencia es: "<<bin_dec_double(ayuda)<<endl;
+                        
+                        //Numero de acuse de recibo
+                        ayuda.clear();
+                        auxiliar.clear();
+                        for(i=0;i<=3;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        cout<< "Numero de acuse de recibo: "<<bin_dec_double(ayuda)<<endl;
+                            ayuda.clear();
+                        palabra = getc(archivo);
+                        auxiliar = binario_8bits(palabra);
+                        for(i=0; i<=3;i++){
+                            ayuda += auxiliar[i];
+                        }
+                        ayuda_int = bin_dec(ayuda);
+                        cout << "Longitud de cabecera: "<< ayuda_int << endl;
+                        cout << "------------BANDERAS DE COMUNICACION TCP--------------"<<endl;
+                        ayuda.clear();
+                        ayuda = auxiliar[7];
+                        cout<< "NS: ";
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        ayuda.clear();
+                        auxiliar.clear();
+                        palabra = getc(archivo);
+                        auxiliar = binario_8bits(palabra);
+                        cout << "CWR: ";
+                        ayuda = auxiliar[0];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"ECE: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[1];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<< "URG: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[2];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"ACK: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[3];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"PSH: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[4];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"RST: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[5];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"SYN: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[6];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                        cout<<"FIN: ";
+                        ayuda.clear();
+                        ayuda = auxiliar[7];
+                        if(ayuda == "0"){
+                            cout<< "desactivado"<<endl;
+                        }
+                        if(ayuda == "1"){
+                            cout << "activado"<<endl;
+                        }
+                    ayuda.clear();
+                    auxiliar.clear();
+                    cout<< "---------TAMAÑO DE VENTANA O VENTANA DE RECEPCION----------"<<endl;
+                    for(i=0;i<=1;i++){
+                        palabra = fgetc(archivo);
+                        auxiliar = binario_8bits(palabra);
+                    }
+                    cout << "Tamaño de ventana o ventana de recepcion: "<< bin_dec(auxiliar)<<endl;
+                    auxiliar.clear();
+                    cout<<"-----------checksum------------"<<endl;
+                    for(i=0;i<=1;i++){
+                        palabra = fgetc(archivo);
+                        printf("%x:",palabra);
+                    }
+                    cout<<endl;
+                    cout<< "----------Puntero urgente----------"<<endl;
+                    for(i=0;i<=1;i++){
+                        palabra = fgetc(archivo);
+                        auxiliar = binario_8bits(palabra);
+                    }
+                    cout << "Puntero urgente: "<< bin_dec(auxiliar)<<endl;
+                    }
+                    //udp
+                    if(version_r==17){
+                        
+                        cout<<"UDP"<<endl;
+                        //UDP
+                        ayuda.clear();
+                        auxiliar.clear();
+                        //puerto de origen
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        
+                        ayuda_int= bin_dec(ayuda);
+                        cout<< "Puerto de origen: "<<ayuda_int<<endl;
+                        cout<< "Puerto de origen catalogado: ";
+                        if(ayuda_int>=0 and ayuda_int<= 1023){
+                            cout<<"Puertos bien conocidos"<<endl;
+                            //ifssss puertos bien conocidos
+                        }
+                        if(ayuda_int>=1024 and ayuda_int<= 49151){
+                            cout<<"Puertos registrados"<<endl;
+                        }
+                        if(ayuda_int>=49152 and ayuda_int<=65535){
+                            cout<<"Puertos dinamicos o privados"<<endl;
+                        }
+                        //puerto de destino
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            ayuda += binario_8bits(palabra);
+                        }
+                        unsigned int ayuda_double;
+                        ayuda_double= bin_dec_double(ayuda);
+                        cout<< "Puerto de destino: "<<ayuda_double<<endl;
+                        cout<< "Puerto de destino catalogado: ";
+                        if(ayuda_double>=0 and ayuda_double<= 1023){
+                            cout<<"Puertos bien conocidos"<<endl;
+                            //ifssss puertos bien conocidos
+                        }
+                        if(ayuda_double>=1024 and ayuda_double<= 49151){
+                            cout<<"Puertos registrados"<<endl;
+                        }
+                        if(ayuda_double>=49152 and ayuda_double<=65535){
+                            cout<<"Puertos dinamicos o privados"<<endl;
+                        }
+
+                        //longitud total
+                        cout<<endl;
+                        cout<<"------Longitud total-------"<<endl;
+                        ayuda.clear();
+                        auxiliar.clear();
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            ayuda += palabra;
+                        }
+                        ayuda_int = bin_dec_double(ayuda);
+                        cout<<"Longitud total es:"<< ayuda_int<<endl;
+
+                        //suma de verificacion/ checksum
+
+                        cout<<"--------Suma de verificacion--------"<<endl;
+                        cout << "Suma de verificacion: ";
+                        for(i=0;i<=1;i++){
+                            palabra = getc(archivo);
+                            printf("%x:",palabra);
+                        }
+                        cout<<endl;
+
+                    }
+                    
                     break;
                 case 6:
                     printf("Tipo: ARP. \n");
