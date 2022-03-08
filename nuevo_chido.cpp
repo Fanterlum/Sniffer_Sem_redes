@@ -438,7 +438,6 @@ int main()
                     cout << endl<<endl;
                     }
                     //tcp
-
                     if(version_r==6){
                         cout<<"TCP"<<endl;
                         //tcp
@@ -451,11 +450,70 @@ int main()
                         }
                         
                         ayuda_int= bin_dec(ayuda);
-                        cout<< "Puerto de origen: "<<ayuda_int<<endl;
-                        cout<< "Puerto de origen catalogado: ";
-                        if(ayuda_int>=0 and ayuda_int<= 1023){
-                            cout<<"Puertos bien conocidos"<<endl;
-                            //ifssss puertos bien conocidos
+                            cout<< "Puerto de origen: "<<ayuda_int<<endl;
+                            cout<< "Puerto de origen catalogado: ";
+                            if(ayuda_int>=0 and ayuda_int<= 1023){
+                                cout<<"Puertos bien conocidos"<<endl;
+                                if(ayuda_int==20){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==21){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==22){
+                                cout<<"     +Servicio: SSH"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==23){
+                                cout<<"     +Servicio: TELNET"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==25){
+                                cout<<"     +Servicio: SMTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==53){
+                                cout<<"     +Servicio: DNC"<<endl;
+                                cout<<"     +Protocolo:  TCP/UDP"<<endl;
+                            }
+                            if(ayuda_int==67){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==68){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==69){
+                                cout<<"     +Servicio: TFTP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==80){
+                                cout<<"     +Servicio: HTTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==110){
+                                cout<<"     +Servicio: POP3"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==143){
+                                cout<<"     +Servicio: IMAP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==443){
+                                cout<<"     +Servicio: HTTPS"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==993){
+                                cout<<"     +Servicio: IMAP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==995){
+                                cout<<"     +Servicio: POP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
                         }
                         if(ayuda_int>=1024 and ayuda_int<= 49151){
                             cout<<"Puertos registrados"<<endl;
@@ -475,7 +533,66 @@ int main()
                         cout<< "Puerto de destino catalogado: ";
                         if(ayuda_int>=0 and ayuda_int<= 1023){
                             cout<<"Puertos bien conocidos"<<endl;
-                            //ifssss puertos bien conocidos
+                            if(ayuda_int==20){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==21){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==22){
+                                cout<<"     +Servicio: SSH"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==23){
+                                cout<<"     +Servicio: TELNET"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==25){
+                                cout<<"     +Servicio: SMTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==53){
+                                cout<<"     +Servicio: DNC"<<endl;
+                                cout<<"     +Protocolo:  TCP/UDP"<<endl;
+                            }
+                            if(ayuda_int==67){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==68){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==69){
+                                cout<<"     +Servicio: TFTP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==80){
+                                cout<<"     +Servicio: HTTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==110){
+                                cout<<"     +Servicio: POP3"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==143){
+                                cout<<"     +Servicio: IMAP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==443){
+                                cout<<"     +Servicio: HTTPS"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==993){
+                                cout<<"     +Servicio: IMAP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==995){
+                                cout<<"     +Servicio: POP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
                         }
                         if(ayuda_int>=1024 and ayuda_int<= 49151){
                             cout<<"Puertos registrados"<<endl;
@@ -634,7 +751,66 @@ int main()
                         cout<< "Puerto de origen catalogado: ";
                         if(ayuda_int>=0 and ayuda_int<= 1023){
                             cout<<"Puertos bien conocidos"<<endl;
-                            //ifssss puertos bien conocidos
+                            if(ayuda_int==20){
+                            cout<<"     +Servicio: FTP"<<endl;
+                            cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==21){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_int==22){
+                                cout<<"     +Servicio: SSH"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==23){
+                                cout<<"     +Servicio: TELNET"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==25){
+                                cout<<"     +Servicio: SMTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==53){
+                                cout<<"     +Servicio: DNC"<<endl;
+                                cout<<"     +Protocolo:  TCP/UDP"<<endl;
+                            }
+                            if(ayuda_int==67){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==68){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==69){
+                                cout<<"     +Servicio: TFTP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_int==80){
+                                cout<<"     +Servicio: HTTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==110){
+                                cout<<"     +Servicio: POP3"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==143){
+                                cout<<"     +Servicio: IMAP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==443){
+                                cout<<"     +Servicio: HTTPS"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==993){
+                                cout<<"     +Servicio: IMAP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_int==995){
+                                cout<<"     +Servicio: POP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
 
                         }
                         if(ayuda_int>=1024 and ayuda_int<= 49151){
@@ -655,7 +831,66 @@ int main()
                         cout<< "Puerto de destino catalogado: ";
                         if(ayuda_double>=0 and ayuda_double<= 1023){
                             cout<<"Puertos bien conocidos"<<endl;
-                            //ifssss puertos bien conocidos
+                                if(ayuda_double==20){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_double==21){
+                                cout<<"     +Servicio: FTP"<<endl;
+                                cout<<"     +Protocolo:  FCP"<<endl;
+                            }
+                            if(ayuda_double==22){
+                                cout<<"     +Servicio: SSH"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==23){
+                                cout<<"     +Servicio: TELNET"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==25){
+                                cout<<"     +Servicio: SMTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==53){
+                                cout<<"     +Servicio: DNC"<<endl;
+                                cout<<"     +Protocolo:  TCP/UDP"<<endl;
+                            }
+                            if(ayuda_double==67){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_double==68){
+                                cout<<"     +Servicio: DHCP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_double==69){
+                                cout<<"     +Servicio: TFTP"<<endl;
+                                cout<<"     +Protocolo:  UDP"<<endl;
+                            }
+                            if(ayuda_double==80){
+                                cout<<"     +Servicio: HTTP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==110){
+                                cout<<"     +Servicio: POP3"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==143){
+                                cout<<"     +Servicio: IMAP"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==443){
+                                cout<<"     +Servicio: HTTPS"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==993){
+                                cout<<"     +Servicio: IMAP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
+                            if(ayuda_double==995){
+                                cout<<"     +Servicio: POP SSL"<<endl;
+                                cout<<"     +Protocolo:  TCP"<<endl;
+                            }
                             if(ayuda_double == 53){
                                 cout<<"Servicio: DNS"<< endl << "Protocolo: TCP/UDP";
                             }
