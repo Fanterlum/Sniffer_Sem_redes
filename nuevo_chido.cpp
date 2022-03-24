@@ -6,6 +6,10 @@
 #include <math.h>
 #include <string>
 #include <ctype.h>
+#include <fstream>
+#include <pcap.h>
+#include <ostream>
+#define LINE_LEN 16
 
 using namespace std;
 
@@ -106,23 +110,186 @@ int protocolo(char n)
 	}
 }
 
-int main()
+int crear_doc(int argc, char **argv){
+
+	pcap_if_t *alldevs, *d;
+	pcap_t *fp;
+	u_int inum, i=0;
+	char errbuf[PCAP_ERRBUF_SIZE];
+	int res;
+	struct pcap_pkthdr *header;
+	const u_char *pkt_data;
+	fstream lectura;
+
+
+	printf("pktdump_ex: prints the packets of the network using WinPcap.\n");
+	printf("   Usage: pktdump_ex [-s source]\n\n"
+		"   Examples:\n"
+		"      pktdump_ex -s file.acp\n"
+		"      pktdump_ex -s \\Device\\NPF_{C8736017-F3C3-4373-94AC-9A34B7DAD998}\n\n");
+
+	if(argc < 3)
+	{
+		printf("\nNo adapter selected: printing the device list:\n");
+		/* The user didn't provide a packet source: Retrieve the local device list */
+		if(pcap_findalldevs(&alldevs, errbuf) == -1)
+		{
+			fprintf(stderr,"Error in pcap_findalldevs_ex: %s\n", errbuf);
+			exit(1);
+		}
+
+		/* Print the list */
+		for(d=alldevs; d; d=d->next)
+		{
+			printf("%d. %s\n    ", ++i, d->name);
+
+			if (d->description)
+				printf(" (%s)\n", d->description);
+			else
+				printf(" (No description available)\n");
+		}
+
+		if (i==0)
+		{
+			printf("\nNo interfaces found! Make sure WinPcap is installed.\n");
+			return -1;
+		}
+
+		printf("Enter the interface number (1-%d):",i);
+		scanf("%d", &inum);
+
+		if (inum < 1 || inum > i)
+		{
+			printf("\nInterface number out of range.\n");
+
+			/* Free the device list */
+			pcap_freealldevs(alldevs);
+			return -1;
+		}
+
+		/* Jump to the selected adapter */
+		for (d=alldevs, i=0; i< inum-1 ;d=d->next, i++);
+
+		/* Open the adapter */
+		if ((fp = pcap_open_live(d->name,	// name of the device
+			65536,							// portion of the packet to capture.
+											// 65536 grants that the whole packet will be captured on all the MACs.
+			1,								// promiscuous mode (nonzero means promiscuous)
+			1000,							// read timeout
+			errbuf							// error buffer
+			)) == NULL)
+		{
+			fprintf(stderr,"\nError opening adapter\n");
+			return -1;
+		}
+	}
+	else
+	{
+		/* Do not check for the switch type ('-s') */
+		if ((fp = pcap_open_live(argv[2],	// name of the device
+			65536,							// portion of the packet to capture.
+											// 65536 grants that the whole packet will be captured on all the MACs.
+			1,								// promiscuous mode (nonzero means promiscuous)
+			1000,							// read timeout
+			errbuf							// error buffer
+			)) == NULL)
+		{
+			fprintf(stderr,"\nError opening adapter\n");
+			return -1;
+		}
+	}
+
+	/* Read the packets */
+	lectura.open("datos.bin",ios::out);
+	string caracter_archivo;
+	int bandera_tronar, flag_tronar=0;
+
+
+	while((res = pcap_next_ex( fp, &header, &pkt_data)) >= 0)
+	{
+
+
+        if(flag_tronar == 1){
+            res = -1;
+            break;
+        }
+        flag_tronar+=1;
+		if(res == 0)
+			/* Timeout elapsed */
+			continue;
+
+		/* print pkt timestamp and pkt len */
+		printf("%ld:%ld (%ld)\n", header->ts.tv_sec, header->ts.tv_usec, header->len);
+
+		/* Print the packet */
+
+
+
+		for (i=1; (i < header->caplen + 1 ) ; i++)
+		{
+			printf("%.2x ", pkt_data[i-1]);
+
+            caracter_archivo = pkt_data[i-1];
+
+
+			lectura << caracter_archivo;
+            caracter_archivo.clear();
+
+
+
+			if ( (i % LINE_LEN) == 0) printf("\n");
+		}
+
+		printf("\n\n");
+	}
+    lectura.close();
+	if(res == -1)
+	{
+		printf("Error reading the packets: %s\n", pcap_geterr(fp));
+		return -1;
+	}
+
+	pcap_close(fp);
+    return bandera_tronar;
+}
+
+
+int main(int argc, char **argv)
 {
+
+    int ciclos_lectura;
+
+
+
+
+
+	//desde aqui comienza mi programa
+
+
     unsigned char(palabra);
-    int i, tres=3;
-    int opcionTipo, protocolo_op, ayuda_int=0;
+    int tres=3,i;
+    int opcionTipo, protocolo_op, ayuda_int=0, bandera_lectura=0;
+
     string ayuda, auxiliar, cero = "0", uno ="1";
     int version_r;
     int bandera_DNS = 0;
 
     FILE *archivo;
+    cout<<"Dame el numero de ciclos de lectura de paquetes que quieres"<<endl;
+    cin>>ciclos_lectura;
 
-    if ((archivo = fopen("ethernet_ipv4_udp_dns.bin","rb+")) == NULL)
+    while(bandera_lectura<=ciclos_lectura-1){
+        bandera_lectura += 1;
+        crear_doc(argc, argv);
+    if ((archivo = fopen("datos.bin","rb+")) == NULL)
         {
             printf (" Error en la apertura. Es posible que el fichero no exista. \n");
         }
     else
         {
+
+
+
             cout<<"                                     *** ETHERNET ***"<<endl<<endl;
             printf("--> Direccion MAC origen:\n");
             cout<<"    ";
@@ -321,7 +488,7 @@ int main()
                 }
             version_r = protocolo(palabra);
             version_r = bin_dec(binario_8bits(palabra));
-            
+
             ayuda.clear();
             auxiliar.clear();
 
@@ -458,7 +625,7 @@ int main()
                     printf ("%02x:",palabra);
 
             }
-                    
+
                     //tcp
                     cout << endl<<endl;
                     }
@@ -473,7 +640,7 @@ int main()
                             palabra = getc(archivo);
                             ayuda += binario_8bits(palabra);
                         }
-                        
+
                         ayuda_int= bin_dec(ayuda);
                             cout<< "Puerto de origen: "<<ayuda_int<<endl;
                             cout<< "Puerto de origen catalogado: ";
@@ -552,7 +719,7 @@ int main()
                             palabra = getc(archivo);
                             ayuda += binario_8bits(palabra);
                         }
-                        
+
                         ayuda_int= bin_dec(ayuda);
                         cout<< "Puerto de destino: "<<ayuda_int<<endl;
                         cout<< "Puerto de destino catalogado: ";
@@ -634,7 +801,7 @@ int main()
                             ayuda += binario_8bits(palabra);
                         }
                         cout<< "Numero de secuencia es: "<<bin_dec_double(ayuda)<<endl;
-                        
+
                         //Numero de acuse de recibo
                         ayuda.clear();
                         auxiliar.clear();
@@ -760,7 +927,7 @@ int main()
                     }
                     //udp
             if(version_r==17){
-                        
+
                         cout<<"UDP"<<endl;
                         //UDP
                         ayuda.clear();
@@ -770,7 +937,7 @@ int main()
                             palabra = getc(archivo);
                             ayuda += binario_8bits(palabra);
                         }
-                        
+
                         ayuda_int= bin_dec(ayuda);
                         cout<< "Puerto de origen: "<<ayuda_int<<endl;
                         cout<< "Puerto de origen catalogado: ";
@@ -957,7 +1124,7 @@ int main()
                             cout<<"---------------DNS----------------"<<endl;
                             ayuda.clear();
                             auxiliar.clear();
-                            
+
                             bandera_DNS = 0;
                             cout<<"--------------ID-----------------"<<endl;
                             for(i=0;i<=1;i++){
@@ -1035,7 +1202,7 @@ int main()
                             }
                             ayuda.clear();
                             cout<<"----------Rcode----------"<<endl;
-                            
+
                             for(i=12;i<=15;i++){
                                 ayuda += auxiliar[i];
                             }
@@ -1100,21 +1267,21 @@ int main()
                             auxiliar.clear();
                             do{
                                 palabra = fgetc(archivo);
-                                
-                                
+
+
                                 if(palabra == 0){
                                     break;
-                                } 
+                                }
                                 auxiliar += palabra;
                                 if(!isalpha(palabra))
                                 {
                                     cout<<".";
                                     auxiliar += ".";
-                                }                           
+                                }
                                 printf("%c",palabra);
-                                
+
                             }while(true);
-                            
+
                             cout<<endl;
                             string link;
                             link = auxiliar;
@@ -1177,7 +1344,7 @@ int main()
                                     ayuda += binario_8bits(palabra);
                                 }
                                 int tipo_respuesta;
-                                
+
                                 cout<<"tipo: ";
                                 ayuda_int = bin_dec(ayuda);
                                 tipo_respuesta = ayuda_int;
@@ -1267,7 +1434,7 @@ int main()
                             }
                         }
                     }
-                    
+
                     break;
                 case 6:
                     printf("Tipo: ARP. \n");
@@ -1286,7 +1453,7 @@ int main()
                     ayuda.clear();
                     for(i=0;i<=1;i++){
                     palabra=fgetc(archivo);
-                    
+
                     }
 
                     //agregar los demas switches
@@ -1302,7 +1469,7 @@ int main()
                     ayuda = binario_8bits(palabra);
                     ayuda_int = bin_dec(ayuda);
                     cout<<" "<<ayuda_int<<endl;
-                    
+
 
                     //longitud protocolo
                     palabra=fgetc(archivo);
@@ -1319,7 +1486,7 @@ int main()
                     for(i=0;i<=1;i++){
                     palabra=fgetc(archivo);
                     auxiliar+=binario_8bits(palabra);
-                    }              
+                    }
                     ayuda_int=bin_dec(auxiliar);
                     if(ayuda_int==1){
                         cout<<"solicitud ARP"<<endl;
@@ -1387,7 +1554,7 @@ int main()
                     ayuda.clear();
                     for(i=0;i<=1;i++){
                     palabra=fgetc(archivo);
-                    
+
                     }
 
                     //agregar los demas switches
@@ -1403,7 +1570,7 @@ int main()
                     ayuda = binario_8bits(palabra);
                     ayuda_int = bin_dec(ayuda);
                     cout<<" "<<ayuda_int<<endl;
-                    
+
 
                     //longitud protocolo
                     palabra=fgetc(archivo);
@@ -1420,7 +1587,7 @@ int main()
                     for(i=0;i<=1;i++){
                     palabra=fgetc(archivo);
                     auxiliar+=binario_8bits(palabra);
-                    }              
+                    }
                     ayuda_int=bin_dec(auxiliar);
                     if(ayuda_int==1){
                         cout<<"solicitud ARP"<<endl;
@@ -1469,8 +1636,8 @@ int main()
                         cout<<ayuda_int<<".";
                     }
                     cout<<endl;
-                    
-                    
+
+
                     break;
                 case 221:
                     printf("Tipo: IPv6. \n");
@@ -1483,7 +1650,7 @@ int main()
                     palabra = getc(archivo);
                     ayuda = binario_8bits(palabra);
                     for(i=0;i<=3;i++){
-                        auxiliar += ayuda[i]; 
+                        auxiliar += ayuda[i];
                     }
                     ayuda_int = bin_dec(auxiliar);
                     if(ayuda_int==6){
@@ -1577,7 +1744,7 @@ int main()
                         cout<<"alta"<<endl;
                     }
                     auxiliar_apoyo.clear();
-                    
+
                     auxiliar.clear();
                     //etiqueta de flujo
 
@@ -1596,7 +1763,7 @@ int main()
                     auxiliar += ayuda;
 
                     cout<<"Etiqueta de flujo: "<<bin_dec(auxiliar)<<endl;
-                    
+
                     //tamaño de datos
                     ayuda.clear();
                     auxiliar.clear();
@@ -1660,7 +1827,7 @@ int main()
                         printf("%x:",palabra);
                     }
                     cout<<endl;
-                    
+
 
                     //ICMPv6
 
@@ -1675,7 +1842,7 @@ int main()
                         tipo_icmp = bin_dec(ayuda);
                         cout<< "Tipo: " << tipo_icmp <<endl;
                         ayuda.clear();
-                        
+
                         //codigo
                         int codigo_icmp;
                         palabra = getc(archivo);
@@ -1683,7 +1850,7 @@ int main()
                         codigo_icmp = bin_dec(ayuda);
                         cout<< "El codigo es: "<< codigo_icmp<< endl;
                         ayuda.clear();
-                        
+
                         //ifs anidados para tablas
                         if(tipo_icmp == 1){
                             cout<<"Mensaje de destino inalcanzable"<<endl;
@@ -1702,7 +1869,7 @@ int main()
                         }
                         if(tipo_icmp == 2){
                             cout<<"Mensaje de paquetes demasiado grande"<<endl;
-                            
+
                         }
                         if(tipo_icmp == 3){
                             cout<< "time exeded Message"<<endl;
@@ -1756,7 +1923,7 @@ int main()
                         for(i=0;i<=1;i++){
                             palabra = getc(archivo);
                             printf("%x:",palabra);
-                            
+
                         }
                         cout<<endl;
 
@@ -1786,8 +1953,11 @@ int main()
                     printf ("%02x:",palabra);
                      }
                printf("\n");
+
         }
 
         fclose(archivo);
-        return (0);
+        remove("datos.bin");
+
 }
+return (0);}
